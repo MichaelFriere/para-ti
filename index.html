@@ -1,0 +1,697 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+
+    <title>Un ramo para ti</title>
+    <style>
+        body {
+            height: 100%;
+            width: 100%;
+            background: #080f1a;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            position: absolute;
+            left: 50%;
+            top: 30%;
+            transform: translate(-50%, -50%);
+        }
+
+        .glass {
+            height: 800px;
+            width: 600px;
+            background: #122139;
+            border-radius: 300px 300px 0px 0px;
+        }
+
+        .glass:before {
+            content: "";
+            height: 40px;
+            width: 40px;
+            transform-origin: center;
+            border: 25px solid #122139;
+            border-radius: 100%;
+            position: absolute;
+            left: 256px;
+            top: -74px;
+        }
+
+        .glass:after {
+            content: "";
+            position: absolute;
+            height: 15px;
+            width: 600px;
+            background: #a52a2a;
+            top: 100%;
+            left: 0%;
+        }
+
+        .shine {
+            width: 26px;
+            height: 330px;
+            background: white;
+            opacity: 0.2;
+            position: absolute;
+            left: 85%;
+            top: 200px;
+            border-radius: 100px;
+            z-index: 10;
+        }
+
+        .shine:before {
+            content: "";
+            width: 26px;
+            height: 40px;
+            position: absolute;
+            background: white;
+            top: 365px;
+            border-radius: 100px;
+        }
+
+        .petals>div {
+            position: absolute;
+            background: #d52d58;
+            width: 85px;
+            height: 120px;
+            top: 200px;
+            transition: all 0.5s ease-out;
+        }
+
+        .petals>div:nth-child(1) {
+            border-radius: 15px;
+            box-shadow: 0px 0px 60px rgba(245, 148, 184, 1);
+            left: 268px;
+            top: 200px;
+            background: #d52d58;
+        }
+
+        .petals>div:nth-child(2),
+        .petals>div:nth-child(4),
+        .petals>div:nth-child(6) {
+            background: #b81b43;
+            left: 230px;
+            border-radius: 0px 50px 0px 50px;
+            transform-origin: bottom right;
+        }
+
+        .petals>div:nth-child(3),
+        .petals>div:nth-child(5),
+        .petals>div:nth-child(7) {
+            background: #b81b43;
+            left: 300px;
+            border-radius: 50px 0px 50px 0px;
+            transform-origin: bottom left;
+        }
+
+        .petals>div:nth-child(2) {
+            z-index: 5;
+            background: #ab1a3f;
+            top: 218px;
+            height: 130px;
+            box-shadow: 0px 0px 60px rgba(245, 148, 184, .5);
+            animation: bloom2 3s ease-in-out;
+            animation-fill-mode: forwards;
+        }
+
+        .petals>div:nth-child(3) {
+            z-index: 4;
+            background: #ab1a3f;
+            top: 218px;
+            height: 130px;
+            box-shadow: 0px 0px 60px rgba(245, 148, 184, .5);
+            animation: bloom3 3s ease-in-out, glowing 2.5s ease-in-out infinite;
+            animation-fill-mode: forwards;
+        }
+
+        .petals>div:nth-child(4) {
+            z-index: 3;
+            background: #b81b43;
+            top: 213px;
+            height: 135px;
+            box-shadow: 0px 0px 60px rgba(245, 148, 184, .5);
+            animation: bloom4 3s ease-in-out, glowing 2.5s ease-in-out infinite;
+            animation-fill-mode: forwards;
+        }
+
+        .petals>div:nth-child(5) {
+            z-index: 2;
+            background: #b81b43;
+            top: 213px;
+            height: 135px;
+            box-shadow: 0px 0px 60px rgba(245, 148, 184, .5);
+            animation: bloom5 3s ease-in-out, glowing 2.5s ease-in-out infinite;
+            animation-fill-mode: forwards;
+        }
+
+        .petals>div:nth-child(6) {
+            z-index: 1;
+            background: #c9204b;
+            top: 200px;
+            height: 130px;
+            box-shadow: 0px 0px 60px rgba(245, 148, 184, .3);
+            animation: bloom6 3s ease-in-out, glowing 2.5s ease-in-out infinite;
+            animation-fill-mode: forwards;
+        }
+
+        .petals>div:nth-child(7) {
+            z-index: 0;
+            background: #c9204b;
+            top: 200px;
+            height: 130px;
+            box-shadow: 0px 0px 60px rgba(245, 148, 184, .3);
+            animation: bloom7 3s ease-in-out, glowing 2.5s ease-in-out infinite;
+            animation-fill-mode: forwards;
+        }
+
+        .deadPetals>div {
+            position: absolute;
+            background: #d52d58;
+            width: 85px;
+            height: 120px;
+            top: 200px;
+            transition: all 0.5s ease-out;
+        }
+
+        /* Modificación del pétalo mágico que cae - ahora cae más rápido y se queda visible */
+        .deadPetals>div:nth-child(1) {
+            left: 300px;
+            background: #d52d58;
+            border-radius: 50px 0px 50px 0px;
+            transform-origin: bottom left;
+            transform: rotate(-30deg);
+            animation: falling 8s 2s ease-in-out forwards, heartbeat 1.5s ease-in-out infinite;
+            box-shadow: 0 0 15px #ff3377, inset 0 0 8px #ff3377;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: rotate(-30deg) scale(1);
+                box-shadow: 0 0 15px #ff3377, inset 0 0 8px #ff3377;
+            }
+            50% {
+                transform: rotate(-30deg) scale(1.1);
+                box-shadow: 0 0 25px #ff3377, inset 0 0 15px #ff3377;
+            }
+            100% {
+                transform: rotate(-30deg) scale(1);
+                box-shadow: 0 0 15px #ff3377, inset 0 0 8px #ff3377;
+            }
+        }
+
+        .deadPetals>div:nth-child(2) {
+            left: 26331084746px;
+            transform: rotate(-30deg);
+            animation: falling 20s 8s ease-in-out infinite;
+        }
+
+        .deadPetals>div:nth-child(3) {
+            left: 129759500363px;
+            transform: rotate(-30deg);
+            animation: falling 20s 12s ease-in-out infinite;
+        }
+
+        .deadPetals>div:nth-child(4) {
+            left: 99323149959px;
+            transform: rotate(-30deg);
+            animation: falling 20s 16s ease-in-out infinite;
+        }
+
+        .leaves>div:nth-last-child(1) {
+            position: absolute;
+            width: 55px;
+            height: 30px;
+            background: #338f37;
+            top: 334px;
+            left: 278px;
+            border-radius: 100px;
+        }
+
+        .leaves>div:nth-child(1) {
+            position: absolute;
+            width: 15px;
+            height: 390px;
+            background: #054c05;
+            top: 308px;
+            left: 300px;
+            border-radius: 0 0 100px 100px;
+        }
+
+        .leaves>div:nth-child(2) {
+            position: absolute;
+            width: 60px;
+            height: 100px;
+            top: 53px;
+            border-radius: 10px 80px 40px 80px;
+            background: #054c05;
+            transform-origin: bottom;
+            transform: rotate(-30deg);
+            top: 412px;
+            left: 254px;
+            box-shadow: inset 10px 10px #066406;
+        }
+
+        .leaves>div:nth-child(3) {
+            position: absolute;
+            width: 60px;
+            height: 100px;
+            top: 53px;
+            border-radius: 80px 1px 80px 40px;
+            background: #054c05;
+            transform-origin: bottom;
+            transform: rotate(30deg);
+            top: 360px;
+            left: 300px;
+            box-shadow: inset -10px 10px #066406;
+        }
+
+        .thorns>div {
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: 200px;
+        }
+
+        .thorns>div:nth-child(odd) {
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 15px solid #054c05;
+            left: 315px;
+        }
+
+        .thorns>div:nth-child(even) {
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 15px solid #054c05;
+            left: 285px;
+        }
+
+        .thorns>div:nth-child(1) {
+            top: 465px;
+        }
+
+        .thorns>div:nth-child(2) {
+            top: 390px;
+        }
+
+        .thorns>div:nth-child(4) {
+            top: 525px;
+        }
+
+        @keyframes bloom2 {
+            50% {
+                transform: rotate(-90deg);
+                top: 400px;
+                left: 150px;
+            }
+
+            100% {
+                transform: rotate(-60deg);
+                top: 615px;
+                left: 100px;
+                background: #71122a;
+                box-shadow: 0px 0px 0px rgba(245, 148, 184, 0);
+            }
+        }
+
+        @keyframes bloom3 {
+            100% {
+                transform: rotate(50deg);
+            }
+        }
+
+        @keyframes bloom4 {
+            100% {
+                transform: rotate(-25deg);
+            }
+        }
+
+        @keyframes bloom5 {
+            100% {
+                transform: rotate(25deg);
+            }
+        }
+
+        @keyframes bloom6 {
+            100% {
+                transform: rotate(-10deg);
+            }
+        }
+
+        @keyframes bloom7 {
+            100% {
+                transform: rotate(10deg);
+            }
+        }
+
+        @keyframes glowing {
+            50% {
+                background: #d7365f;
+                box-shadow: 0px 0px 60px rgba(245, 148, 184, 1);
+            }
+        }
+
+        /* Modificación de la animación de caída para que sea más rápida y se quede visible */
+        @keyframes falling {
+            20% {
+                top: 400px;
+                background: #d52d58;
+            }
+
+            100% {
+                top: 615px;
+                left: 100px;
+                transform: rotate(-60deg);
+                background: #71122a;
+                /* No hay cambio en la opacidad para que se quede visible */
+            }
+        }
+
+        .texto {
+            top: 50%;
+            color: white;
+            font-size: 35px;
+            position: absolute;
+            left: 10%;
+        }
+        
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 101;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #122139;
+            border-radius: 15px;
+            box-shadow: 0 0 20px #ff3377;
+            width: 400px;
+            padding: 30px;
+            text-align: center;
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from {transform: scale(0); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        .modal h2 {
+            color: #ff3377;
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .modal input {
+            padding: 10px;
+            width: 80%;
+            border: 2px solid #ff3377;
+            border-radius: 5px;
+            background-color: #0a1728;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .modal button {
+            padding: 10px 20px;
+            background-color: #ff3377;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal button:hover {
+            background-color: #d52d58;
+        }
+
+        .close-modal {
+            color: #ff3377;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Estilos para la carta secreta */
+        .love-letter {
+            display: none;
+            position: fixed;
+            z-index: 102;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter-content {
+            background: linear-gradient(145deg, #ffebf1, #ffcfdf);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 105, 180,.8);
+            width: 80%;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+            font-family: 'cursive', sans-serif;
+            position: relative;
+            animation: letterFadeIn 0.5s;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        @keyframes letterFadeIn {
+            from {transform: rotateY(90deg); opacity: 0;}
+            to {transform: rotateY(0); opacity: 1;}
+        }
+
+        .letter-content::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+            pointer-events: none;
+        }
+
+        .letter-content h1 {
+            color: #d52d58;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        .letter-content p {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .heart-decoration {
+            position: absolute;
+            font-size: 60px;
+            color: #ff3377;
+            opacity: 0.2;
+        }
+
+        .heart-decoration:nth-child(1) {
+            top: 20px;
+            left: 20px;
+            transform: rotate(-20deg);
+        }
+
+        .heart-decoration:nth-child(2) {
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(20deg);
+        }
+
+        .close-letter {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #d52d58;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .wrong-password {
+            color: #ff3377;
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="glass">
+            <div class="shine"></div>
+        </div>
+        <div class="thorns">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="leaves">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="petals">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="deadPetals">
+            <div id="magicPetal"></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div>
+        <h4 class="texto">Una flor hermosa para ti niña preciosa! ❤️</h4>
+    </div>
+
+    <!-- Modal para la contraseña -->
+    <div id="passwordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2>¡Genial! Encotraste el pétalo Mágico!</h2>
+            <p>Este es un pétalo especial que guarda un secreto. Ingresa la contraseña para descubrirlo. (sino la sabes intenta con algo primero)</p>
+            <input type="password" id="passwordInput" placeholder="Ingresa la contraseña...">
+            <p id="wrongPasswordMsg" class="wrong-password"></p>
+            <button id="submitPassword">Descubrir</button>
+        </div>
+    </div>
+
+    <!-- Carta secreta -->
+    <div id="loveLetter" class="love-letter" style="display: none;">
+        <div class="letter-content">
+            <span class="heart-decoration">❤</span>
+            <span class="heart-decoration">❤</span>
+            <span class="close-letter" id="closeLetter">&times;</span>
+            <h1>Mi vida hermosa</h1>
+            <p>Corazón,
+                no sabes cuánto me alegra tenerte en mi vida, eres como esa flor mágica de los cuentos, pero tranquila, aquí los pétalos no se caen porque mi amor por ti es más terco que yo tratando de bailar 😜. Cada risa tuya, cada abrazo apretadito, cada gesto tuyo, son mi alegría diaria, y créeme, voy tan lleno de amor que ni el último pétalo se atrevería a caer. Eres mi desastre favorito, mi risa asegurada, mi abrazo de casa, ¡y mi motivo más bonito para seguir soñando despierto!
+                
+                Te amo más de lo que un perrito ama salir a pasear, y eso ya es decir muchísimo. Prometo que mi amor será eterno, paciente y tierno, como esas historias que uno quiere contar una y otra vez. Este sentimiento que tengo hacia ti es algo tan hermoso que ni el tiempo ni la distancia podrían apagarlo. Hasta el último pétalo, amor mío... y aún después, seguiré eligiéndote todos los días de mi vida. 💖🌹</p>
+        </div>
+    </div>
+
+    <script>
+        // Contraseña para acceder a la carta secreta
+        const PASSWORD = "7 de noviembre"; // Puedes cambiar esta contraseña
+        
+        // Chistes coquetos para mostrar cuando la contraseña es incorrecta
+        const JOKES = [
+            "Casi aciertas... Recuerdas la fecha cuando fuimos novios?. ¡Inténtalo de nuevo!",
+            "¿Olvidaste la contraseña? No olvides cuánto te quiero, eso nunca cambia.",
+            "Sí claro... es una fecha (ún numero, dos palabras y claro con espacios)",
+            "Contraseña incorrecta... pero tu sonrisa siempre es la clave para mi corazón.",
+            "Mmm, no es esa. ¿Sabes qué sí es correcto? Lo guapa que te ves hoy.",
+            "Esa no es... pero tu forma de intentarlo me enamora. ¡Prueba otra vez!",
+            "Nope, esa no es la contraseña, pero tú sigues siendo mi persona favorita.",
+            "Error en la contraseña... pero nunca hay error en elegirte a ti todos los días."
+        ];
+
+        // Elemento del pétalo mágico
+        const magicPetal = document.getElementById("magicPetal");
+        const passwordModal = document.getElementById("passwordModal");
+        const loveLetter = document.getElementById("loveLetter");
+        const closeModal = document.getElementById("closeModal");
+        const closeLetter = document.getElementById("closeLetter");
+        const passwordInput = document.getElementById("passwordInput");
+        const submitButton = document.getElementById("submitPassword");
+        const wrongPasswordMsg = document.getElementById("wrongPasswordMsg");
+
+        // Evento para hacer clic en el pétalo mágico
+        magicPetal.addEventListener("click", function() {
+            passwordModal.style.display = "flex";
+        });
+
+        // Cerrar el modal de contraseña
+        closeModal.addEventListener("click", function() {
+            passwordModal.style.display = "none";
+            passwordInput.value = "";
+            wrongPasswordMsg.textContent = "";
+        });
+
+        // Cerrar la carta
+        closeLetter.addEventListener("click", function() {
+            loveLetter.style.display = "none";
+        });
+
+        // Verificar la contraseña
+        submitButton.addEventListener("click", checkPassword);
+        passwordInput.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                checkPassword();
+            }
+        });
+
+        function checkPassword() {
+            const enteredPassword = passwordInput.value;
+            
+            if (enteredPassword.toLowerCase() === PASSWORD) {
+                // Contraseña correcta, mostrar la carta
+                passwordModal.style.display = "none";
+                loveLetter.style.display = "flex";
+                passwordInput.value = "";
+                wrongPasswordMsg.textContent = "";
+            } else {
+                // Contraseña incorrecta, mostrar un chiste aleatorio
+                const randomJoke = JOKES[Math.floor(Math.random() * JOKES.length)];
+                wrongPasswordMsg.textContent = randomJoke;
+                passwordInput.value = "";
+            }
+        }
+
+        // Cerrar modales al hacer clic fuera de ellos
+        window.addEventListener("click", function(event) {
+            if (event.target === passwordModal) {
+                passwordModal.style.display = "none";
+                passwordInput.value = "";
+                wrongPasswordMsg.textContent = "";
+            }
+            if (event.target === loveLetter) {
+                loveLetter.style.display = "none";
+            }
+        });
+    </script>
+</body>
+
+</html>
